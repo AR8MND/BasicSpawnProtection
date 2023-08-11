@@ -1,0 +1,3 @@
+# A list of worlds that need to be protected.
+worlds:
+  - spawn #The name of the folder, not the data from level.dat
