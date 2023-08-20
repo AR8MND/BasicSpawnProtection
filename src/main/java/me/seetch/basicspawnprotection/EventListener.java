@@ -4,11 +4,9 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.block.BlockBreakEvent;
-import cn.nukkit.event.block.BlockPlaceEvent;
-import cn.nukkit.event.block.BlockUpdateEvent;
-import cn.nukkit.event.block.SignChangeEvent;
+import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
@@ -48,35 +46,35 @@ public class EventListener implements Listener {
         return worlds.contains(position.getLevel().getFolderName());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockUpdate(BlockUpdateEvent event) {
         if (this.checkSpawnProtection(event.getBlock())) {
             event.setCancelled();
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         if (this.checkSpawnProtection(event.getPosition())) {
             event.setCancelled();
@@ -89,16 +87,23 @@ public class EventListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onSignChange(SignChangeEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
         if (this.checkSpawnProtection(event.getEntity())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onItemFrameUse(ItemFrameUseEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
     }
