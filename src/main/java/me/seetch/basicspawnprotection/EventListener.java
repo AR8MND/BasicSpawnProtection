@@ -7,6 +7,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
@@ -81,6 +82,7 @@ public class EventListener implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
@@ -98,6 +100,14 @@ public class EventListener implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (this.checkSpawnProtection(event.getEntity())) {
             event.setCancelled();
+        }
+
+        if (event instanceof EntityDamageByEntityEvent) {
+            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+
+            if (this.checkSpawnProtection(damager)) {
+                event.setCancelled();
+            }
         }
     }
 
