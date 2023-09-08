@@ -10,23 +10,23 @@ import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
+import cn.nukkit.event.level.WeatherChangeEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.level.Level;
+import cn.nukkit.event.player.PlayerItemConsumeEvent;
+import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.level.Position;
-
-import java.util.List;
 
 public class EventListener implements Listener {
 
-    private final List<String> worlds;
+    private BasicSpawnProtectionPlugin plugin;
 
     public EventListener(BasicSpawnProtectionPlugin plugin) {
-        this.worlds = plugin.getConfig().getStringList("worlds");
+        this.plugin = plugin;
     }
 
     private boolean checkSpawnProtection(Player player) {
-        if (worlds.contains(player.getLevel().getFolderName())) {
+        if (plugin.settings.getWorlds().contains(player.getLevel().getFolderName())) {
             return !player.hasPermission("basicspawnprotect.bypass");
         }
 
@@ -34,7 +34,7 @@ public class EventListener implements Listener {
     }
 
     private boolean checkSpawnProtection(Entity entity) {
-        if (worlds.contains(entity.getLevel().getFolderName())) {
+        if (plugin.settings.getWorlds().contains(entity.getLevel().getFolderName())) {
             if (entity instanceof Player) {
                 return !((Player) entity).hasPermission("basicspawnprotect.bypass");
             }
@@ -44,53 +44,11 @@ public class EventListener implements Listener {
     }
 
     private boolean checkSpawnProtection(Position position) {
-        return worlds.contains(position.getLevel().getFolderName());
+        return plugin.settings.getWorlds().contains(position.getLevel().getFolderName());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (this.checkSpawnProtection(event.getPlayer())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBlockPlace(BlockPlaceEvent event) {
-        if (this.checkSpawnProtection(event.getPlayer())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBlockUpdate(BlockUpdateEvent event) {
-        if (this.checkSpawnProtection(event.getBlock())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onInteract(PlayerInteractEvent event) {
-        if (this.checkSpawnProtection(event.getPlayer())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onEntityExplode(EntityExplodeEvent event) {
-        if (this.checkSpawnProtection(event.getPosition())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (this.checkSpawnProtection(event.getPlayer())) {
-            event.setCancelled();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onSignChange(SignChangeEvent event) {
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
@@ -112,9 +70,91 @@ public class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onWeatherChange(WeatherChangeEvent event) {
+        if (plugin.settings.getWorlds().contains(event.getLevel().getFolderName())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockBurn(BlockBurnEvent event) {
+        if (this.checkSpawnProtection(event.getBlock())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onInteract(PlayerInteractEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockUpdate(BlockUpdateEvent event) {
+        if (this.checkSpawnProtection(event.getBlock())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        if (this.checkSpawnProtection(event.getPosition())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onSignChange(SignChangeEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onItemFrameUse(ItemFrameUseEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (plugin.settings.isVoidTpEnabled()) {
+            if (player.getLocation().getY() < plugin.settings.getVoidTpLevel()) {
+                player.teleport(getSpawn(player));
+            }
+        }
+    }
+
+    private Position getSpawn(Player player) {
+        for (String w : plugin.settings.getWorlds()) {
+            if (w.contains(player.getLevel().getFolderName())) {
+                return Server.getInstance().getLevelByName(w).getSpawnLocation();
+            }
+        }
+        return Server.getInstance().getDefaultLevel().getSpawnLocation();
     }
 }

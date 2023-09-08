@@ -1,3 +1,14 @@
 # A list of worlds that need to be protected.
 worlds:
-  - spawn #The name of the folder, not the data from level.dat
+  - spawn
+
+# To prevent players from falling into the void.
+# level = height level(s) that could be taken as empty.
+void-tp:
+  enable: true
+  level: 0
+
+# So that the world is always day or always night.
+# If both the first and second parameters are enabled, the first one will not work and vice versa.
+always-day: true
+always-night: false
