@@ -11,11 +11,10 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.level.WeatherChangeEvent;
-import cn.nukkit.event.player.PlayerDropItemEvent;
-import cn.nukkit.event.player.PlayerInteractEvent;
-import cn.nukkit.event.player.PlayerItemConsumeEvent;
-import cn.nukkit.event.player.PlayerMoveEvent;
+import cn.nukkit.event.player.*;
 import cn.nukkit.level.Position;
+
+import java.awt.*;
 
 public class EventListener implements Listener {
 
@@ -134,6 +133,41 @@ public class EventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onItemFrameUse(ItemFrameUseEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onBlockIgnite(BlockIgniteEvent event) {
+        if (this.checkSpawnProtection(event.getEntity())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onSignColorChange(SignColorChangeEvent event) {
+        if (this.checkSpawnProtection(event.getPlayer())) {
+            event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onSignGlow(SignGlowEvent event) {
         if (this.checkSpawnProtection(event.getPlayer())) {
             event.setCancelled();
         }

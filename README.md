@@ -8,11 +8,14 @@ Features
 - [x] Disable Weather.
 - [x] Disabled Block Break & Place.
 - [x] Disable Block Burn.
+- [x] Disable Block Igniting.
 - [x] Disable Item Drop.
 - [x] Disable Interact.
 - [x] Disable Block Update.
 - [x] Disable Explode.
 - [x] Disable Sign Change.
+- [x] Disable Bucket Filling.
+- [x] Disable Bucket Emptying.
 - [x] Frame Protect.
 - [x] Always Day or Night.
 - [x] Void Teleport to Spawn.
