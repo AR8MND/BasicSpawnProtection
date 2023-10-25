@@ -20,8 +20,6 @@ public class Settings {
     public Settings(Config config) {
         this.worlds = config.getStringList("worlds");
 
-        Server.getInstance().getLogger().notice(worlds.toString());
-
         this.voidTpEnabled = config.getBoolean("void-tp.enable");
         this.voidTpLevel = config.getInt("void-tp.level");
 
