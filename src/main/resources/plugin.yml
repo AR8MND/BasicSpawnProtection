@@ -1,6 +1,6 @@
 name: BasicSpawnProtection
 version: "${pom.version}"
 main: me.seetch.basicspawnprotection.BasicSpawnProtectionPlugin
-api: 1.0.14
+api: 2.0.0
 authors:
   - https://github.com/seetch
